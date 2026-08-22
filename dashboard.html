@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة المحاضرات | Syntaxcraft</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fff;
+            padding: 15px 25px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .lecture-card {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .logout-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-header">
+        <h2>مرحباً بك في منطقة المحاضرات</h2>
+        <button onclick="logout()" class="logout-btn">تسجيل الخروج</button>
+    </div>
+
+    <div class="lecture-card">
+        <h3>المحاضرة الأولى: مقدمة في البرمجة وتجهيز بيئة العمل</h3>
+        <p>شرح المفاهيم الأساسية وكيفية كتابة أول كود.</p>
+        <iframe 
+            width="100%" 
+            height="400" 
+            src="https://www.youtube.com/embed/YOUR_VIDEO_ID" 
+            title="Lecture Video" 
+            frameborder="0" 
+            allowfullscreen>
+        </iframe>
+    </div>
+
+    <!-- Firebase Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+    <script src="auth.js"></script>
+    <script>
+        // التحقق من أن الطالب مسجل دخول بالفعل
+        auth.onAuthStateChanged((user) => {
+            if (!user) {
+                // إذا لم يكن مسجل دخول يتم توجيهه تلقائياً لصفحة الدخول
+                window.location.href = "login.html";
+            }
+        });
+
+        function logout() {
+            auth.signOut().then(() => {
+                window.location.href = "login.html";
+            });
+        }
+    </script>
+</body>
+</html>
