@@ -1,0 +1,95 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Syntaxcraft</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+
+    <header class="welcome-header">
+        <h1>مرحباً بكم في Syntaxcraft</h1>
+        <p>منصتك الاحترافية لتعلم البرمجة وتطوير المهارات</p>
+        <div style="margin-top: 15px;">
+            <a href="/login" class="btn" style="text-decoration:none; padding: 10px 20px; background-color: #007bff; color: white; border-radius: 5px;">تسجيل الدخول للطلاب</a>
+        </div>
+    </header>
+
+    <div class="courses-container">
+        
+        <!-- قسم الكورسات المرفوعة من قاعدة البيانات -->
+        {% for course in courses %}
+          <div class="course-card">
+            {% if course.image %}
+              <img src="{{ course.image.url }}" alt="{{ course.title }}">
+            {% else %}
+              <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=500" alt="{{ course.title }}">
+            {% endif %}
+            <h3>{{ course.title }}</h3>
+            <p>{{ course.description }}</p>
+            <p class="price">السعر: {{ course.price }} جنيه</p>
+            <button class="btn" onclick="showDetails('{{ course.title }}', 'السعر: {{ course.price }} جنيه', ['مراجعة وشرح المنهج كاملاً', 'تطبيقات عملية ومشاريع', 'متابعة دورية وإجابة الاستفسارات'])">عرض التفاصيل</button>
+          </div>
+        {% empty %}
+          <p style="text-align: center; grid-column: 1/-1;">لا توجد كورسات مضافة حالياً في قاعدة البيانات.</p>
+        {% endfor %}
+
+        <!-- قسم المحاضرات المرفوعة -->
+        {% for lecture in lectures %}
+          <div class="course-card">
+            <h3>{{ lecture.title }}</h3>
+            {% if lecture.file %}
+              {% if ".mp4" in lecture.file.url or ".webm" in lecture.file.url %}
+                <video width="100%" controls>
+                  <source src="{{ lecture.file.url }}" type="video/mp4">
+                  متصفحك لا يدعم تشغيل الفيديو.
+                </video>
+              {% else %}
+                <a href="{{ lecture.file.url }}" target="_blank" class="btn" style="display:inline-block; margin-top:10px; text-decoration:none;">تحميل / عرض الملف</a>
+              {% endif %}
+            {% endif %}
+          </div>
+        {% endfor %}
+
+    </div>
+
+    <!-- النافذة المنبثقة عرض التفاصيل -->
+    <div id="courseModal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle">اسم الكورس</h2>
+            <p id="modalPrice" class="price"></p>
+            <h4>محاور الكورس:</h4>
+            <ul id="modalTopics"></ul>
+            
+            <div class="payment-note">
+                📌 <strong>ملاحظة:</strong> يتم تفعيل المحتوى وتوفير المحاضرات مباشرة فور إتمام عملية الدفع وتأكيد الحجز عبر الواتساب.
+            </div>
+
+            <a id="whatsappBtn" href="#" target="_blank" class="subscribe-btn">حجز الكورس عبر الواتساب</a>
+        </div>
+    </div>
+
+    <script src="{% static 'script.js' %}"></script>
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyC2kWsBsQ1pDOYRQ5FivWwYhW2hxBswgnY",
+        authDomain: "syntaxcraft-1f748.firebaseapp.com",
+        projectId: "syntaxcraft-1f748",
+        storageBucket: "syntaxcraft-1f748.firebasestorage.app",
+        messagingSenderId: "901989038549",
+        appId: "1:901989038549:web:905d0c96a2de96790a255c",
+        measurementId: "G-8WMTLSNR20"
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+    </script>
+</body>
+</html>

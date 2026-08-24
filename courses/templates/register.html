@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>إنشاء حساب جديد - Syntaxcraft</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    <div style="max-width: 400px; margin: 50px auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px;">
+        <h2>إنشاء حساب طالب جديد</h2>
+        
+        {% if messages %}
+            {% for message in messages %}
+                <p style="color: red;">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+            <div style="margin-bottom: 15px;">
+                <label>اسم المستخدم:</label><br>
+                <input type="text" name="username" required style="width: 100%; padding: 8px;">
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label>البريد الإلكتروني:</label><br>
+                <input type="email" name="email" style="width: 100%; padding: 8px;">
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label>كلمة المرور:</label><br>
+                <input type="password" name="password" required style="width: 100%; padding: 8px;">
+            </div>
+            <button type="submit" class="btn" style="width: 100%; padding: 10px; background-color: #28a745; color: white; border: none; border-radius: 4px;">إنشاء الحساب</button>
+        </form>
+
+        <p style="margin-top: 15px;">لديك حساب بالفعل؟ <a href="/login">تسجيل الدخول</a></p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,33 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>محاضرات كورس {{ course.title }}</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #12181b; color: #fff; margin: 0; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: #1e293b; padding: 30px; border-radius: 12px; }
+        h1 { color: #38bdf8; text-align: center; margin-bottom: 30px; }
+        .lecture-item { background: #0f172a; padding: 20px; border-radius: 8px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
+        .lecture-item a { color: #4ade80; text-decoration: none; font-weight: bold; background: #166534; padding: 8px 15px; border-radius: 5px; }
+        .back-btn { display: inline-block; margin-bottom: 20px; color: #fff; background: #475569; padding: 8px 15px; text-decoration: none; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="{% url 'dashboard' %}" class="back-btn">⬅ العودة لوحة التحكم</a>
+        <h1>محاضرات كورس: {{ course.title }}</h1>
+        
+        {% for lecture in lectures %}
+            <div class="lecture-item">
+                <span><strong>{{ lecture.title }}</strong></span>
+                {% if lecture.file %}
+                    <a href="{{ lecture.file.url }}" download>📥 تحميل المحاضرة</a>
+                {% endif %}
+            </div>
+        {% empty %}
+            <p style="text-align: center; color: #94a3b8;">لم يتم رفع محاضرات لهذا الكورس حتى الآن. ترقبوها قريباً!</p>
+        {% endfor %}
+    </div>
+</body>
+</html>
