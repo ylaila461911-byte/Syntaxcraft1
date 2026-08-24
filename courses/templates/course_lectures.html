@@ -15,18 +15,19 @@
 </head>
 <body>
     <div class="container">
-        <a href="{% url 'dashboard' %}" class="back-btn">⬅ العودة لوحة التحكم</a>
+        <a href="{% url 'dashboard' %}" class="back-btn">العودة للوحة التحكم</a>
         <h1>محاضرات كورس: {{ course.title }}</h1>
-        
         {% for lecture in lectures %}
             <div class="lecture-item">
                 <span><strong>{{ lecture.title }}</strong></span>
-                {% if lecture.file %}
-                    <a href="{{ lecture.file.url }}" download>📥 تحميل المحاضرة</a>
+                {% if lecture.link %}
+                    <a href="{{ lecture.link }}" target="_blank" rel="noopener noreferrer">فتح المحاضرة / اللايف</a>
+                {% elif lecture.file %}
+                    <a href="{{ lecture.file.url }}" download>تحميل المحاضرة</a>
                 {% endif %}
             </div>
         {% empty %}
-            <p style="text-align: center; color: #94a3b8;">لم يتم رفع محاضرات لهذا الكورس حتى الآن. ترقبوها قريباً!</p>
+            <p style="text-align: center; color: #94a3b8;">لا توجد محاضرات لهذا الكورس حتى الآن.</p>
         {% endfor %}
     </div>
 </body>

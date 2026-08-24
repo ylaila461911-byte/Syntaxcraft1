@@ -16,7 +16,8 @@ urlpatterns = [
     path('course/<int:course_id>/lectures/', views.course_lectures, name='course_lectures'),
 ]
 
-urlpatterns += static(
-    settings.MEDIA_URL,
-    document_root=settings.MEDIA_ROOT
-)
+if settings.DEBUG:
+    urlpatterns += static(
+        settings.MEDIA_URL,
+        document_root=settings.MEDIA_ROOT
+    )

@@ -14,7 +14,9 @@ class Lecture(models.Model):
     # ربط المحاضرة بكورس معين (بحيث تظهر فقط للـ كورس ده)
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='lectures', null=True, blank=True)
     title = models.CharField(max_length=200)
-    file = models.FileField(upload_to='lectures/')
+    # Existing local uploads stay in place. New lessons use the link field.
+    file = models.FileField(upload_to='lectures/', blank=True, null=True)
+    link = models.URLField('رابط المحاضرة أو اللايف', blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

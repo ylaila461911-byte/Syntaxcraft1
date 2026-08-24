@@ -1,8 +1,9 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 from .models import Lecture, Course, Enrollment
 
 # الصفحة الرئيسية (تعرض الكورسات والمحاضرات)
@@ -15,15 +16,30 @@ def home(request):
     })
 
 # صفحة لوحة تحكم رفع المحاضرات
+@user_passes_test(lambda user: user.is_staff, login_url='login')
 def admin_page(request):
+    courses = Course.objects.all().order_by('title')
+
     if request.method == 'POST':
         title = request.POST.get('title')
-        file = request.FILES.get('file')
-        if title and file:
-            Lecture.objects.create(title=title, file=file)
-            return redirect('admin_page')
-            
-    return render(request, 'admin.html')
+        link = request.POST.get('link')
+        course_id = request.POST.get('course')
+
+        if title and link and course_id:
+            course = get_object_or_404(Course, id=course_id)
+            lecture = Lecture(title=title, link=link, course=course)
+            try:
+                lecture.full_clean()
+                lecture.save()
+            except ValidationError:
+                messages.error(request, 'الرابط غير صحيح. ابدئيه بـ https://')
+            else:
+                messages.success(request, 'تمت إضافة رابط المحاضرة للكورس بنجاح.')
+                return redirect('admin_page')
+
+        messages.error(request, 'اكتبي العنوان، اختاري الكورس، وضعي الرابط الصحيح.')
+
+    return render(request, 'admin.html', {'courses': courses})
 
 # صفحة الطلاب (الرئيسية سابقة)
 def student_page(request):
